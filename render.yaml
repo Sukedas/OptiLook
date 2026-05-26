@@ -1,0 +1,20 @@
+# Blueprint para desplegar en Render.
+# Render normalmente usa el repo conectado al dashboard; si tu instalación requiere
+# campos extra, ajusta estos valores según la documentación de Render.
+
+services:
+  - type: web
+    name: optilook-backend
+    plan: starter
+    healthCheckPath: /api/v1/health
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: backend
+
+  - type: web
+    name: optilook-frontend
+    plan: starter
+    healthCheckPath: /
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    rootDir: frontend
