@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: optilook-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: optilook
+    ports:
+      - "5432:5432"
+    volumes:
+      - optilook_postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ../backend
+    container_name: optilook-backend
+    restart: unless-stopped
+    environment:
+      PORT: 8000
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/optilook
+      CORS_ORIGINS: http://localhost:3000,http://localhost:8000
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app
+    command: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  frontend:
+    build:
+      context: ../frontend
+    container_name: optilook-frontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    command: sh -c "npm run dev -- -p 3000"
+
+volumes:
+  optilook_postgres_data:
