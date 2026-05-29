@@ -45,52 +45,111 @@ Variables relevantes:
 
 ## Desarrollo local
 
-### Backend (sin Docker)
-1. Entrar a `backend/`
-2. Crear y activar entorno virtual
-3. Instalar dependencias:
-   - `pip install -r requirements.txt`
-4. Ejecutar:
-   - `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+Sigue estos pasos paso a paso para levantar tanto el backend como el frontend en tu máquina local.
 
-Healthcheck:
-- `GET http://localhost:8000/api/v1/health`
+### 🔌 Variables de Entorno (Paso 0)
 
-### Frontend (sin Docker)
-1. Entrar a `frontend/`
-2. Instalar dependencias:
-   - `npm install`
-3. Ejecutar en modo desarrollo:
-   - `npm run dev` (usa el puerto 3000)
+1. En la raíz de tu espacio de trabajo, crea los archivos de entorno locales:
+   - Copia `/backend/.env.example` a `/backend/.env`
+   - Copia `/frontend/.env.example` a `/frontend/.env`
 
-Notas:
-- El frontend intenta llamar al backend en `NEXT_PUBLIC_API_BASE_URL`.
+2. Asegúrate de configurar la variable `DATABASE_URL` en `/backend/.env` con las credenciales de tu PostgreSQL. Ejemplo:
+   ```env
+   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/optilook
+   PORT=8000
+   CORS_ORIGINS=http://localhost:3000,http://localhost:8000
+   ```
 
-### Desarrollo local (con Docker Compose)
-Desde `infra/`:
+3. En `/frontend/.env`, verifica que `NEXT_PUBLIC_API_BASE_URL` apunte a tu backend local:
+   ```env
+   NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
+   ```
 
-```bash
-docker compose up --build
-```
+---
 
-Verificación:
-- Backend: `http://localhost:8000/api/v1/health`
-- Frontend: `http://localhost:3000`
+### 🐍 Ejecución del Backend (FastAPI)
 
-## Despliegue
-Consulta:
-- `docs/deployment.md`
-- `render.yaml`
+1. **Entrar al directorio del Backend**:
+   ```bash
+   cd backend
+   ```
 
-El backend debe tener una URL pública accesible para que el frontend pueda consumirlo mediante `NEXT_PUBLIC_API_BASE_URL`.
+2. **Crear y activar un entorno virtual**:
+   - En **Windows (PowerShell)**:
+     ```powershell
+     python -m venv venv
+     .\venv\Scripts\Activate.ps1
+     ```
+   - En **Linux / macOS**:
+     ```bash
+     python3 -m venv venv
+     source venv/bin/activate
+     ```
 
-## Integración de diseño (Figma -> frontend)
-Guía en:
-- `docs/figma-workflow.md`
+3. **Instalar dependencias**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+   *Nota: Esto instalará automáticamente FastAPI, Uvicorn, SQLAlchemy, psycopg2-binary y email-validator.*
 
-Incluye convenciones de nombres, entrega del diseño y checklist para implementar UI en Next.js.
+4. **Ejecutar el servidor local**:
+   ```bash
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
 
-## Próximos pasos (no incluidos todavía)
-- Modelado de base de datos y migraciones
-- Endpoints para clientes y transacciones
-- Conexión real del frontend con los endpoints (más allá del healthcheck)
+5. **Verificación**:
+   - Healthcheck: `GET http://localhost:8000/api/v1/health`
+   - Documentación Interactiva (Swagger UI): `http://localhost:8000/docs`
+
+---
+
+### ⚛️ Ejecución del Frontend (Next.js 14)
+
+1. **Entrar al directorio del Frontend**:
+   ```bash
+   cd frontend
+   ```
+
+2. **Instalar dependencias**:
+   ```bash
+   npm install
+   ```
+
+3. **Ejecutar en modo de desarrollo**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Verificación**:
+   - Abre tu navegador en `http://localhost:3000` para acceder a la suite administrativa interactiva y realizar diagnósticos geométricos de rostro.
+
+---
+
+### 🐳 Ejecución Consistente (con Docker Compose)
+
+Si tienes Docker Desktop iniciado y prefieres levantar todos los servicios en contenedores aislados:
+
+1. **Entrar al directorio de infraestructura**:
+   ```bash
+   cd infra
+   ```
+
+2. **Levantar contenedores**:
+   ```bash
+   docker compose up --build
+   ```
+
+3. **Verificación**:
+   - Frontend Dashboard: `http://localhost:3000`
+   - Backend API: `http://localhost:8000`
+
+---
+
+## 🚀 Hoja de Ruta del Proyecto (Completada)
+
+- [x] **Modelado de Base de Datos**: Mapeo completo en SQLAlchemy de tablas PostgreSQL preexistentes (`usuario`, `montura`, `transaccion`, `requiere`, etc.).
+- [x] **Patrones de Diseño GoF**: Implementación estricta de **DAO**, **DTO**, **Strategy**, **State**, **Observer**, **Factory Method** y **Facade** en backend.
+- [x] **Endpoints Completos**: CRUD de Clientes con soft-delete, catálogo de Monturas con restricción de aumentos, Transacciones con máquina de estados y motor de Recomendaciones.
+- [x] **Conexión Frontend-Backend**: Flujos de compra, cambio de estados inline, diagnósticos vectoriales de rostro y sincronización automática de stock con React Query v5.
+- [ ] Implementación de pasarela de pagos real.
+- [ ] Carga automatizada de PDF oftálmico con OCR (reconocimiento óptico).
