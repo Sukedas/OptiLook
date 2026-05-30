@@ -48,12 +48,50 @@ export const useClientes = () => {
     },
   });
 
+  const useGetClienteFormulas = (id: number) =>
+    useQuery({
+      queryKey: ["clienteFormulas", id],
+      queryFn: () => clientesApi.getFormulas(id),
+      enabled: !!id,
+    });
+
+  const createFormulaMutation = useMutation({
+    mutationFn: ({ id, dto }: { id: number; dto: { idFormula: number; idUsuario: number; vigencia: boolean; formulaPDF: string; observacion: string } }) =>
+      clientesApi.createFormula(id, dto),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cliente", data.idUsuario] });
+      queryClient.invalidateQueries({ queryKey: ["clienteFormulas", data.idUsuario] });
+    },
+  });
+
+  const updateFormulaMutation = useMutation({
+    mutationFn: ({ id, formulaId, dto }: { id: number; formulaId: number; dto: { vigencia: boolean; formulaPDF: string; observacion: string } }) =>
+      clientesApi.updateFormula(id, formulaId, dto),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cliente", data.idUsuario] });
+      queryClient.invalidateQueries({ queryKey: ["clienteFormulas", data.idUsuario] });
+    },
+  });
+
+  const activarFormulaMutation = useMutation({
+    mutationFn: ({ id, formulaId }: { id: number; formulaId: number }) =>
+      clientesApi.activarFormula(id, formulaId),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cliente", data.idUsuario] });
+      queryClient.invalidateQueries({ queryKey: ["clienteFormulas", data.idUsuario] });
+    },
+  });
+
   return {
     useGetClientes,
     useGetCliente,
     useGetClienteTransacciones,
+    useGetClienteFormulas,
     createClienteMutation,
     updateClienteMutation,
     deleteClienteMutation,
+    createFormulaMutation,
+    updateFormulaMutation,
+    activarFormulaMutation,
   };
 };

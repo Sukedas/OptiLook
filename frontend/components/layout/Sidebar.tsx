@@ -9,7 +9,8 @@ import {
   Sparkles, 
   LayoutDashboard, 
   Eye,
-  LogOut
+  LogOut,
+  FileText
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -22,6 +23,7 @@ export default function Sidebar() {
     { href: "/monturas", label: "Monturas", icon: Glasses },
     { href: "/transacciones", label: "Transacciones", icon: Receipt },
     { href: "/recomendaciones", label: "Recomendaciones", icon: Sparkles },
+    { href: "/mi-formula", label: "Mi Fórmula", icon: FileText },
   ].filter(link => {
     if (link.href === "/clientes") {
       return user?.rol === "administrador";

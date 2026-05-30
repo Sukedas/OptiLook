@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.core.database import get_db
-from app.dto.cliente_dto import ClienteResponseDTO, CreateClienteDTO, UpdateClienteDTO
+from app.dto.cliente_dto import ClienteResponseDTO, CreateClienteDTO, UpdateClienteDTO, FormulaResponseDTO, CreateFormulaDTO, UpdateFormulaDTO
 from app.dto.transaccion_dto import TransaccionResponseDTO
 from app.services.cliente_service import cliente_service
 from app.api.v1.dependencies import get_current_user, get_current_admin
@@ -116,3 +116,60 @@ def get_cliente_transacciones(
             detail="Permiso denegado: no puedes ver las transacciones de otros clientes"
         )
     return cliente_service.get_transacciones(db, id)
+
+
+@router.get("/{id}/formulas", response_model=List[FormulaResponseDTO], summary="Listar fórmulas de un cliente")
+def get_cliente_formulas(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: Cliente = Depends(get_current_user)
+):
+    """
+    Lista el historial de fórmulas ópticas cargadas para un cliente.
+    """
+    if current_user.rol != "administrador" and current_user.idUsuario != id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Permiso denegado: no puedes ver las fórmulas ópticas de otros clientes"
+        )
+    return cliente_service.get_formulas(db, id)
+
+
+@router.post("/{id}/formulas", response_model=FormulaResponseDTO, status_code=status.HTTP_201_CREATED, summary="Crear fórmula para un cliente")
+def create_cliente_formula(
+    id: int,
+    dto: CreateFormulaDTO,
+    db: Session = Depends(get_db),
+    admin: Cliente = Depends(get_current_admin)
+):
+    """
+    Permite al administrador cargar una nueva prescripción / fórmula para un cliente.
+    """
+    return cliente_service.create_formula(db, id, dto)
+
+
+@router.put("/{id}/formulas/{formula_id}", response_model=FormulaResponseDTO, summary="Actualizar fórmula de un cliente")
+def update_cliente_formula(
+    id: int,
+    formula_id: int,
+    dto: UpdateFormulaDTO,
+    db: Session = Depends(get_db),
+    admin: Cliente = Depends(get_current_admin)
+):
+    """
+    Permite al administrador actualizar los campos de una fórmula óptica específica.
+    """
+    return cliente_service.update_formula(db, formula_id, dto)
+
+
+@router.post("/{id}/formulas/{formula_id}/activar", response_model=ClienteResponseDTO, summary="Establecer fórmula como activa")
+def activar_cliente_formula(
+    id: int,
+    formula_id: int,
+    db: Session = Depends(get_db),
+    admin: Cliente = Depends(get_current_admin)
+):
+    """
+    Permite al administrador activar una fórmula óptica como la principal para el cliente.
+    """
+    return cliente_service.activar_formula(db, id, formula_id)

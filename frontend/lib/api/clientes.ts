@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { Cliente, CreateCliente, UpdateCliente, Transaccion } from "../types";
+import { Cliente, CreateCliente, UpdateCliente, Transaccion, Formula } from "../types";
 
 export const clientesApi = {
   getAll: async (skip = 0, limit = 50): Promise<Cliente[]> => {
@@ -31,6 +31,26 @@ export const clientesApi = {
 
   getTransacciones: async (id: number): Promise<Transaccion[]> => {
     const res = await apiClient.get<Transaccion[]>(`/api/v1/clientes/${id}/transacciones`);
+    return res.data;
+  },
+
+  getFormulas: async (id: number): Promise<Formula[]> => {
+    const res = await apiClient.get<Formula[]>(`/api/v1/clientes/${id}/formulas`);
+    return res.data;
+  },
+
+  createFormula: async (id: number, dto: { idFormula: number; idUsuario: number; vigencia: boolean; formulaPDF: string; observacion: string }): Promise<Formula> => {
+    const res = await apiClient.post<Formula>(`/api/v1/clientes/${id}/formulas`, dto);
+    return res.data;
+  },
+
+  updateFormula: async (id: number, formulaId: number, dto: { vigencia: boolean; formulaPDF: string; observacion: string }): Promise<Formula> => {
+    const res = await apiClient.put<Formula>(`/api/v1/clientes/${id}/formulas/${formulaId}`, dto);
+    return res.data;
+  },
+
+  activarFormula: async (id: number, formulaId: number): Promise<Cliente> => {
+    const res = await apiClient.post<Cliente>(`/api/v1/clientes/${id}/formulas/${formulaId}/activar`);
     return res.data;
   },
 };
