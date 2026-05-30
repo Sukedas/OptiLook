@@ -453,6 +453,7 @@ el equipo de optometría de OptiLook Suite.
             )}
           </div>
       </div>
+      </div>
 
       {/* Formula Editor Modal */}
       {showFormulaModal && (
