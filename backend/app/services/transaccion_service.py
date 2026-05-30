@@ -14,6 +14,7 @@ class TransaccionService:
         status: Optional[str] = None,
         date_from: Optional[datetime] = None,
         date_to: Optional[datetime] = None,
+        cliente_id: Optional[int] = None,
         skip: int = 0,
         limit: int = 100
     ) -> List[Transaccion]:
@@ -22,6 +23,7 @@ class TransaccionService:
             status=status,
             date_from=date_from,
             date_to=date_to,
+            cliente_id=cliente_id,
             skip=skip,
             limit=limit
         )

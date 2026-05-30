@@ -21,7 +21,6 @@ export default function LoginPage() {
   const [registerPassword, setRegisterPassword] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
   const [direccion, setDireccion] = useState("");
-  const [registerRole, setRegisterRole] = useState("cliente");
 
   // Error and Loading States
   const [error, setError] = useState<string | null>(null);
@@ -80,7 +79,7 @@ export default function LoginPage() {
         fechaNacimiento,
         direccion,
         contrasena: registerPassword,
-        rol: registerRole
+        rol: "cliente"
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al registrarse");
@@ -294,36 +293,7 @@ export default function LoginPage() {
                 </div>
               </div>
 
-              {/* Role Selection */}
-              <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tipo de Usuario (Rol) *</label>
-                <div className="grid grid-cols-2 gap-2 mt-1">
-                  <button
-                    type="button"
-                    onClick={() => setRegisterRole("cliente")}
-                    className={`py-2 border rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
-                      registerRole === "cliente"
-                        ? "bg-indigo-600/10 border-indigo-500 text-indigo-400"
-                        : "border-slate-800 text-slate-400 hover:border-slate-700"
-                    }`}
-                  >
-                    <Users className="w-3.5 h-3.5" />
-                    Cliente
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRegisterRole("administrador")}
-                    className={`py-2 border rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
-                      registerRole === "administrador"
-                        ? "bg-purple-600/10 border-purple-500 text-purple-400"
-                        : "border-slate-800 text-slate-400 hover:border-slate-700"
-                    }`}
-                  >
-                    <Shield className="w-3.5 h-3.5" />
-                    Administrador
-                  </button>
-                </div>
-              </div>
+
 
               <button
                 type="submit"

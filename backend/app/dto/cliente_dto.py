@@ -72,3 +72,4 @@ class UpdateClienteDTO(BaseModel):
     direccion: Optional[str] = None
     idTipo: Optional[int] = None
     idFormulaActual: Optional[int] = None
+    rol: Optional[str] = None

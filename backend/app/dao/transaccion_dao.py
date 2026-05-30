@@ -16,6 +16,7 @@ class TransaccionDAO(BaseDAO[Transaccion, CreateTransaccionDTO, UpdateTransaccio
         status: Optional[str] = None,
         date_from: Optional[datetime] = None,
         date_to: Optional[datetime] = None,
+        cliente_id: Optional[int] = None,
         skip: int = 0,
         limit: int = 100
     ) -> List[Transaccion]:
@@ -26,6 +27,8 @@ class TransaccionDAO(BaseDAO[Transaccion, CreateTransaccionDTO, UpdateTransaccio
             query = query.filter(self.model.fechaTransaccion >= date_from)
         if date_to:
             query = query.filter(self.model.fechaTransaccion <= date_to)
+        if cliente_id:
+            query = query.filter(self.model.idUsuario == cliente_id)
         return query.order_by(self.model.fechaTransaccion.desc()).offset(skip).limit(limit).all()
 
     def get_detalle(self, db: Session, detalle_id: int) -> Optional[TransaccionDetalle]:

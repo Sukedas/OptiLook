@@ -51,6 +51,9 @@ def register(dto: CreateClienteDTO, db: Session = Depends(get_db)):
     """
     Crea una cuenta para un nuevo cliente en el sistema.
     """
+    # Forzar rol a 'cliente' para registros públicos
+    dto.rol = "cliente"
+    
     # Si no se provee un ID de usuario válido (por ejemplo, es <= 0), generarlo correlativamente
     if dto.idUsuario <= 0:
         from sqlalchemy import func

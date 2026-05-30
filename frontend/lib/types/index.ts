@@ -52,6 +52,7 @@ export interface UpdateCliente {
   direccion?: string;
   idTipo?: number | null;
   idFormulaActual?: number | null;
+  rol?: string;
 }
 
 export interface Material {

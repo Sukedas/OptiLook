@@ -22,7 +22,12 @@ export default function Sidebar() {
     { href: "/monturas", label: "Monturas", icon: Glasses },
     { href: "/transacciones", label: "Transacciones", icon: Receipt },
     { href: "/recomendaciones", label: "Recomendaciones", icon: Sparkles },
-  ];
+  ].filter(link => {
+    if (link.href === "/clientes") {
+      return user?.rol === "administrador";
+    }
+    return true;
+  });
 
   return (
     <aside className="w-64 bg-slate-900/60 border-r border-slate-800/60 backdrop-blur-xl h-screen sticky top-0 flex flex-col p-6">

@@ -1,19 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useClientes } from "../../../hooks/useClientes";
 import { useRecomendaciones } from "../../../hooks/useRecomendaciones";
 import { useTransacciones } from "../../../hooks/useTransacciones";
+import { useAuth } from "../../../hooks/useAuth";
 import FaceTypeSelector from "../../../components/recomendaciones/FaceTypeSelector";
 import MonturaRecommendationCard from "../../../components/recomendaciones/MonturaRecommendationCard";
 import { getFaceDetail } from "../../../utils/faceTypes";
 import { Sparkles, Users, Loader2, Sparkle, ShoppingBag } from "lucide-react";
 
 export default function RecomendacionesPage() {
+  const { user } = useAuth();
   const [selectedClienteId, setSelectedClienteId] = useState<number | null>(null);
   const [selectedFaceId, setSelectedFaceId] = useState<number | null>(null);
   const [loadingMsg, setLoadingMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user && user.rol === "cliente") {
+      setSelectedClienteId(user.idUsuario);
+      if (user.idTipo) {
+        setSelectedFaceId(user.idTipo);
+      }
+    }
+  }, [user]);
 
   const { useGetClientes } = useClientes();
   const { data: clientes = [], isLoading: loadingClientes } = useGetClientes();
@@ -23,7 +34,6 @@ export default function RecomendacionesPage() {
     generarRecomendacionesMutation 
   } = useRecomendaciones();
 
-  const { useGetMonturas } = useClientes();
   const { createTransaccionMutation } = useTransacciones();
 
   const { 
@@ -115,41 +125,65 @@ export default function RecomendacionesPage() {
       <div className="glass-panel rounded-2xl border border-slate-800/60 p-6 space-y-6 bg-slate-900/30">
         
         {/* Step 1: Client Selector */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
-            <Users className="w-4 h-4 text-indigo-400" />
-            1. Seleccionar Cliente de Evaluación
-          </label>
-          
-          {loadingClientes ? (
-            <p className="text-xs text-slate-500 italic">Buscando base de datos de clientes...</p>
-          ) : (
-            <select
-              value={selectedClienteId || ""}
-              onChange={(e) => {
-                const val = parseInt(e.target.value) || null;
-                setSelectedClienteId(val);
-                
-                // Pre-select customer face shape if they already have one computed
-                const c = clientes.find(item => item.idUsuario === val);
-                if (c && c.idTipo) {
-                  setSelectedFaceId(c.idTipo);
-                } else {
-                  setSelectedFaceId(null);
-                }
-                setSuccessMsg(null);
-              }}
-              className="w-full max-w-md bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500/50"
-            >
-              <option value="">-- Elige un cliente para comenzar --</option>
-              {clientes.map((c) => (
-                <option key={c.idUsuario} value={c.idUsuario}>
-                  {c.primerNombre} {c.primerApellido} (ID: #{c.idUsuario} {c.idTipo ? `— Rostro ${getFaceDetail(c.idTipo).name}` : "— Sin evaluar"})
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
+        {user?.rol === "administrador" ? (
+          <div className="space-y-2">
+            <label className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <Users className="w-4 h-4 text-indigo-400" />
+              1. Seleccionar Cliente de Evaluación
+            </label>
+            
+            {loadingClientes ? (
+              <p className="text-xs text-slate-500 italic">Buscando base de datos de clientes...</p>
+            ) : (
+              <select
+                value={selectedClienteId || ""}
+                onChange={(e) => {
+                  const val = parseInt(e.target.value) || null;
+                  setSelectedClienteId(val);
+                  
+                  // Pre-select customer face shape if they already have one computed
+                  const c = clientes.find(item => item.idUsuario === val);
+                  if (c && c.idTipo) {
+                    setSelectedFaceId(c.idTipo);
+                  } else {
+                    setSelectedFaceId(null);
+                  }
+                  setSuccessMsg(null);
+                }}
+                className="w-full max-w-md bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500/50"
+              >
+                <option value="">-- Elige un cliente para comenzar --</option>
+                {clientes.map((c) => (
+                  <option key={c.idUsuario} value={c.idUsuario}>
+                    {c.primerNombre} {c.primerApellido} (ID: #{c.idUsuario} {c.idTipo ? `— Rostro ${getFaceDetail(c.idTipo).name}` : "— Sin evaluar"})
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        ) : (
+          <div className="space-y-2 animate-in fade-in duration-300">
+            <label className="flex items-center gap-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider">
+              <Users className="w-4 h-4 text-indigo-400" />
+              Mi Perfil de Diagnóstico
+            </label>
+            <div className="p-4 rounded-2xl border border-slate-800/80 bg-slate-950/40 backdrop-blur-xl flex items-center justify-between max-w-md">
+              <div>
+                <p className="text-xs font-bold text-slate-200">
+                  {user?.primerNombre} {user?.primerApellido}
+                </p>
+                <p className="text-[10px] text-slate-500 mt-0.5">
+                  ID de Cliente: #{user?.idUsuario}
+                </p>
+              </div>
+              <div className="text-right">
+                <span className="text-[9px] bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  Sincronizado
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Step 2: Face Selector */}
         {selectedClienteId && (
