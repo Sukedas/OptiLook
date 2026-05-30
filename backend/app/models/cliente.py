@@ -41,6 +41,7 @@ class Cliente(Base):
     fechaNacimiento = Column(Date, nullable=False)
     direccion = Column(String(255), nullable=False)
     hashContrasena = Column(BigInteger, nullable=False)
+    rol = Column(String(255), nullable=False, server_default="cliente")
 
     tipo_rostro = relationship("TipoRostro", back_populates="clientes")
     formulas = relationship("Formula", foreign_keys=[Formula.idUsuario], back_populates="usuario")

@@ -18,9 +18,10 @@ interface MonturaGridProps {
   monturas: Montura[];
   onAdjustStock: (id: number, stock: number) => void;
   isAdjusting: boolean;
+  isAdmin?: boolean;
 }
 
-export default function MonturaGrid({ monturas, onAdjustStock, isAdjusting }: MonturaGridProps) {
+export default function MonturaGrid({ monturas, onAdjustStock, isAdjusting, isAdmin = false }: MonturaGridProps) {
   const [editingStockId, setEditingStockId] = useState<number | null>(null);
   const [stockInput, setStockInput] = useState<number>(0);
 
@@ -134,7 +135,7 @@ export default function MonturaGrid({ monturas, onAdjustStock, isAdjusting }: Mo
                       <div className="text-right">
                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Inventario</p>
                         
-                        {isEditingThis ? (
+                        {isEditingThis && isAdmin ? (
                           <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-1 py-1 rounded-xl">
                             <button
                               onClick={() => setStockInput(Math.max(0, stockInput - 1))}
@@ -163,17 +164,26 @@ export default function MonturaGrid({ monturas, onAdjustStock, isAdjusting }: Mo
                             </button>
                           </div>
                         ) : (
-                          <button
-                            onClick={() => startEditingStock(montura)}
-                            className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-indigo-400 border border-transparent hover:border-slate-800 px-2 py-0.5 rounded-lg transition-all duration-200"
-                            title="Ajustar Stock"
-                          >
-                            <span className={isNoStock ? "text-rose-400 font-extrabold" : isLowStock ? "text-amber-400 font-bold" : "text-slate-200"}>
-                              {montura.stockMontura}
-                            </span>
-                            <span className="text-[10px] text-slate-500 font-normal">uds</span>
-                            <RefreshCw className="w-3 h-3 text-slate-500 shrink-0 ml-1 group-hover:rotate-180 transition-transform duration-500" />
-                          </button>
+                          isAdmin ? (
+                            <button
+                              onClick={() => startEditingStock(montura)}
+                              className="flex items-center gap-1 text-xs font-bold text-slate-300 hover:text-indigo-400 border border-transparent hover:border-slate-800 px-2 py-0.5 rounded-lg transition-all duration-200"
+                              title="Ajustar Stock"
+                            >
+                              <span className={isNoStock ? "text-rose-400 font-extrabold" : isLowStock ? "text-amber-400 font-bold" : "text-slate-200"}>
+                                {montura.stockMontura}
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-normal">uds</span>
+                              <RefreshCw className="w-3 h-3 text-slate-500 shrink-0 ml-1 group-hover:rotate-180 transition-transform duration-500" />
+                            </button>
+                          ) : (
+                            <div className="flex items-center gap-1 text-xs font-semibold px-2 py-0.5">
+                              <span className={isNoStock ? "text-rose-400 font-extrabold" : isLowStock ? "text-amber-400 font-bold" : "text-slate-300"}>
+                                {montura.stockMontura}
+                              </span>
+                              <span className="text-[10px] text-slate-500 font-normal">uds</span>
+                            </div>
+                          )
                         )}
                       </div>
                     </div>

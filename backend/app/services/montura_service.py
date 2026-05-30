@@ -36,6 +36,11 @@ class MonturaService:
         return montura
 
     def create_montura(self, db: Session, dto: CreateMonturaDTO) -> Montura:
+        if dto.idMontura is None or dto.idMontura <= 0:
+            from sqlalchemy import func
+            max_id = db.query(func.max(Montura.idMontura)).scalar()
+            dto.idMontura = (max_id + 1) if max_id is not None else 1
+            
         existente = montura_dao.get(db, dto.idMontura)
         if existente:
             raise HTTPException(status_code=400, detail="El ID de la montura ya se encuentra registrado")

@@ -27,9 +27,17 @@ export const useMonturas = () => {
     },
   });
 
+  const createMonturaMutation = useMutation({
+    mutationFn: (dto: Partial<Montura>) => monturasApi.create(dto),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["monturas"] });
+    },
+  });
+
   return {
     useGetMonturas,
     useGetMontura,
     adjustStockMutation,
+    createMonturaMutation,
   };
 };

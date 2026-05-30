@@ -25,6 +25,7 @@ export interface Cliente {
   correoUsuario: string;
   fechaNacimiento: string;
   direccion: string;
+  rol: string;
   tipo_rostro?: TipoRostro | null;
   formula_actual?: Formula | null;
 }
@@ -39,6 +40,7 @@ export interface CreateCliente {
   fechaNacimiento: string;
   direccion: string;
   contrasena: string;
+  rol?: string;
 }
 
 export interface UpdateCliente {

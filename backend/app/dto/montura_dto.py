@@ -25,7 +25,7 @@ class MonturaResponseDTO(BaseModel):
 
 
 class CreateMonturaDTO(BaseModel):
-    idMontura: int
+    idMontura: Optional[int] = None
     idMaterial: int
     nombreMontura: str
     imagenMontura: str

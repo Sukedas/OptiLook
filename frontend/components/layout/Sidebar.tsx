@@ -8,11 +8,14 @@ import {
   Receipt, 
   Sparkles, 
   LayoutDashboard, 
-  Eye
+  Eye,
+  LogOut
 } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   const links = [
     { href: "/clientes", label: "Clientes", icon: Users },
@@ -58,16 +61,28 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer Info */}
-      <div className="mt-auto pt-6 border-t border-slate-800/40 px-2">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-semibold text-indigo-300">
-            AD
+      <div className="mt-auto pt-6 border-t border-slate-800/40 px-2 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xs font-bold text-indigo-300 shrink-0">
+            {user ? `${user.primerNombre.charAt(0)}${user.primerApellido.charAt(0)}` : "AD"}
           </div>
-          <div>
-            <p className="text-xs font-semibold text-slate-300">Administrador</p>
-            <p className="text-[10px] text-slate-500">OptiLook Staff</p>
+          <div className="truncate">
+            <p className="text-xs font-bold text-slate-200 truncate">
+              {user ? `${user.primerNombre} ${user.primerApellido}` : "OptiLook Staff"}
+            </p>
+            <p className="text-[10px] text-slate-500 capitalize truncate font-medium">
+              {user ? user.rol : "Cargando..."}
+            </p>
           </div>
         </div>
+        
+        <button 
+          onClick={logout}
+          className="w-7 h-7 rounded-lg bg-slate-950 border border-slate-800/80 hover:bg-rose-500/10 hover:text-rose-400 text-slate-400 flex items-center justify-center transition-colors shrink-0"
+          title="Cerrar Sesión"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+        </button>
       </div>
     </aside>
   );

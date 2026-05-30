@@ -1,4 +1,3 @@
-from apiClient from "./client";
 import { apiClient } from "./client";
 import { Cliente, CreateCliente, UpdateCliente, Transaccion } from "../types";
 

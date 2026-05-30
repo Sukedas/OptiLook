@@ -18,7 +18,8 @@ CREATE TABLE "usuario"(
     "correoUsuario" VARCHAR(255) NOT NULL,
     "fechaNacimiento" DATE NOT NULL,
     "direccion" VARCHAR(255) NOT NULL,
-    "hashContrasena" BIGINT NOT NULL
+    "hashContrasena" BIGINT NOT NULL,
+    "rol" VARCHAR(50) NOT NULL DEFAULT 'cliente'
 );
 ALTER TABLE
     "usuario" ADD PRIMARY KEY("idUsuario");
@@ -125,18 +126,20 @@ INSERT INTO "usuario" (
     "correoUsuario",
     "fechaNacimiento",
     "direccion",
-    "hashContrasena"
+    "hashContrasena",
+    "rol"
 ) VALUES
-(1, NULL, NULL, 'Ana', 'Lucia', 'Gomez', 'Perez', 'ana.gomez@example.com', '1998-03-14', 'Calle 10 # 15-20', 1234567890),
-(2, NULL, NULL, 'Carlos', 'Andres', 'Ramirez', 'Lopez', 'carlos.ramirez@example.com', '1995-07-22', 'Avenida 5 # 8-30', 2345678901),
-(3, NULL, NULL, 'Maria', 'Fernanda', 'Torres', 'Diaz', 'maria.torres@example.com', '2000-11-05', 'Carrera 12 # 45-18', 3456789012),
-(4, NULL, NULL, 'Jorge', 'Ivan', 'Martinez', 'Sanchez', 'jorge.martinez@example.com', '1992-01-28', 'Calle 24 # 9-11', 4567890123),
-(5, NULL, NULL, 'Laura', 'Valentina', 'Castro', 'Rojas', 'laura.castro@example.com', '1997-09-16', 'Transversal 3 # 22-40', 5678901234),
-(6, NULL, NULL, 'Diego', 'Alejandro', 'Vargas', 'Moreno', 'diego.vargas@example.com', '1994-04-09', 'Diagonal 7 # 30-25', 6789012345),
-(7, NULL, NULL, 'Sofia', 'Isabel', 'Ortiz', 'Herrera', 'sofia.ortiz@example.com', '2001-12-21', 'Calle 18 # 6-14', 7890123456),
-(8, NULL, NULL, 'Mateo', 'Emilio', 'Navarro', 'Cruz', 'mateo.navarro@example.com', '1999-06-03', 'Avenida 9 # 17-56', 8901234567),
-(9, NULL, NULL, 'Camila', 'Patricia', 'Mendoza', 'Gil', 'camila.mendoza@example.com', '1996-10-30', 'Carrera 4 # 11-07', 9012345678),
-(10, NULL, NULL, 'Sebastian', 'David', 'Pena', 'Flores', 'sebastian.pena@example.com', '1993-02-12', 'Calle 31 # 2-19', 1122334455);
+(1, NULL, NULL, 'Ana', 'Lucia', 'Gomez', 'Perez', 'ana.gomez@example.com', '1998-03-14', 'Calle 10 # 15-20', 1234567890, 'administrador'),
+(2, NULL, NULL, 'Carlos', 'Andres', 'Ramirez', 'Lopez', 'carlos.ramirez@example.com', '1995-07-22', 'Avenida 5 # 8-30', 2345678901, 'cliente'),
+(3, NULL, NULL, 'Maria', 'Fernanda', 'Torres', 'Diaz', 'maria.torres@example.com', '2000-11-05', 'Carrera 12 # 45-18', 3456789012, 'cliente'),
+(4, NULL, NULL, 'Jorge', 'Ivan', 'Martinez', 'Sanchez', 'jorge.martinez@example.com', '1992-01-28', 'Calle 24 # 9-11', 4567890123, 'cliente'),
+(5, NULL, NULL, 'Laura', 'Valentina', 'Castro', 'Rojas', 'laura.castro@example.com', '1997-09-16', 'Transversal 3 # 22-40', 5678901234, 'cliente'),
+(6, NULL, NULL, 'Diego', 'Alejandro', 'Vargas', 'Moreno', 'diego.vargas@example.com', '1994-04-09', 'Diagonal 7 # 30-25', 6789012345, 'cliente'),
+(7, NULL, NULL, 'Sofia', 'Isabel', 'Ortiz', 'Herrera', 'sofia.ortiz@example.com', '2001-12-21', 'Calle 18 # 6-14', 7890123456, 'cliente'),
+(8, NULL, NULL, 'Mateo', 'Emilio', 'Navarro', 'Cruz', 'mateo.navarro@example.com', '1999-06-03', 'Avenida 9 # 17-56', 8901234567, 'cliente'),
+(9, NULL, NULL, 'Camila', 'Patricia', 'Mendoza', 'Gil', 'camila.mendoza@example.com', '1996-10-30', 'Carrera 4 # 11-07', 9012345678, 'cliente'),
+(10, NULL, NULL, 'Sebastian', 'David', 'Pena', 'Flores', 'sebastian.pena@example.com', '1993-02-12', 'Calle 31 # 2-19', 1122334455, 'cliente'),
+(99, NULL, NULL, 'Admin', '', 'OptiLook', '', 'admin@optilook.com', '1990-01-01', 'Oficina Central', 8996614481545633832, 'administrador');
 
 INSERT INTO "material" (
     "idMaterial",

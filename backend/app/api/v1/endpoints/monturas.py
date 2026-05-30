@@ -5,6 +5,7 @@ from decimal import Decimal
 from app.core.database import get_db
 from app.dto.montura_dto import MonturaResponseDTO, CreateMonturaDTO, UpdateMonturaDTO, AdjustStockDTO
 from app.services.montura_service import montura_service
+from app.api.v1.dependencies import get_current_admin
 
 router = APIRouter()
 
@@ -35,9 +36,13 @@ def get_monturas(
 
 
 @router.post("/", response_model=MonturaResponseDTO, status_code=status.HTTP_201_CREATED, summary="Registrar nueva montura")
-def create_montura(dto: CreateMonturaDTO, db: Session = Depends(get_db)):
+def create_montura(
+    dto: CreateMonturaDTO, 
+    db: Session = Depends(get_db),
+    admin = Depends(get_current_admin)
+):
     """
-    Agrega un nuevo marco de gafas al catálogo.
+    Agrega un nuevo marco de gafas al catálogo. Solo accesible para administradores.
     """
     return montura_service.create_montura(db, dto)
 
@@ -51,17 +56,27 @@ def get_montura(id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{id}", response_model=MonturaResponseDTO, summary="Actualizar información de montura")
-def update_montura(id: int, dto: UpdateMonturaDTO, db: Session = Depends(get_db)):
+def update_montura(
+    id: int, 
+    dto: UpdateMonturaDTO, 
+    db: Session = Depends(get_db),
+    admin = Depends(get_current_admin)
+):
     """
-    Modifica las propiedades físicas o el precio de una montura en catálogo. 
+    Modifica las propiedades físicas o el precio de una montura en catálogo. Solo accesible para administradores.
     Lanza un error si el incremento supera el doble del precio actual (Trigger business rule).
     """
     return montura_service.update_montura(db, id, dto)
 
 
 @router.patch("/{id}/stock", response_model=MonturaResponseDTO, summary="Ajustar stock de montura")
-def adjust_montura_stock(id: int, dto: AdjustStockDTO, db: Session = Depends(get_db)):
+def adjust_montura_stock(
+    id: int, 
+    dto: AdjustStockDTO, 
+    db: Session = Depends(get_db),
+    admin = Depends(get_current_admin)
+):
     """
-    Actualiza de forma absoluta y atómica el nivel de inventario para una montura específica.
+    Actualiza de forma absoluta y atómica el nivel de inventario para una montura específica. Solo accesible para administradores.
     """
     return montura_service.adjust_stock(db, id, dto.stock)

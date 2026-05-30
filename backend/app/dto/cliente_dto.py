@@ -41,6 +41,7 @@ class ClienteResponseDTO(BaseModel):
     correoUsuario: str
     fechaNacimiento: date
     direccion: str
+    rol: str
     
     # We omit hashContrasena in output for security
     tipo_rostro: Optional[TipoRostroResponseDTO] = None
@@ -59,6 +60,7 @@ class CreateClienteDTO(BaseModel):
     fechaNacimiento: date
     direccion: str
     contrasena: str  # Plain text contrasena, which we will hash into hashContrasena
+    rol: Optional[str] = "cliente"
 
 
 class UpdateClienteDTO(BaseModel):

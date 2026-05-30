@@ -11,6 +11,22 @@ export const apiClient = axios.create({
   },
 });
 
+// Request interceptor to attach bearer token automatically
+apiClient.interceptors.request.use(
+  (config) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("optilook_token");
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Response interceptor to format errors nicely
 apiClient.interceptors.response.use(
   (response) => response,
