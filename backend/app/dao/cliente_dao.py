@@ -19,11 +19,11 @@ class ClienteDAO(BaseDAO[Cliente, CreateClienteDTO, UpdateClienteDTO]):
         return db.query(Formula).filter(Formula.idUsuario == cliente_id).all()
 
     def soft_delete(self, db: Session, cliente_id: int) -> Optional[Cliente]:
-        # Since the database schema doesn't have an "activo" or "deleted" column,
-        # we will simulate soft delete by renaming the email to 'deleted_{id}_{email}'
-        # and logging it, or simply removing it. Let's append "DELETED_" to the email
-        # to free it up for new registrations and prevent login, which is a standard way 
-        # to implement soft delete on legacy schemas without altering tables.
+        # Dado que el esquema de la base de datos no tiene una columna "activo" o "eliminado",
+        # simularemos la eliminación lógica renombrando el correo electrónico a 'eliminado_{id}_{correo electrónico}'
+        # y registrándolo, o simplemente eliminándolo. Añadamos "ELIMINADO_" al correo electrónico
+        # para liberarlo para nuevos registros e impedir el inicio de sesión, que es una forma estándar
+        # de implementar la eliminación lógica en esquemas heredados sin modificar las tablas.
         cliente = self.get(db, cliente_id)
         if cliente:
             if not cliente.correoUsuario.startswith("deleted_"):

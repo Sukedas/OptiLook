@@ -15,4 +15,4 @@ class RecomendacionResponseDTO(BaseModel):
 
 class GenerarRecomendacionDTO(BaseModel):
     idUsuario: int
-    idTipo: int  # Face type ID to run the strategy against
+    idTipo: int  # Identificador del tipo de rostro para ejecutar la estrategia contra
