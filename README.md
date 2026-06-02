@@ -199,5 +199,5 @@ También puede visualizarse directamente desde el repositorio de GitHub.
 * pgAdmin 4
 * Git
 * GitHub
-*Python
-*TypeScript
+* Python
+* TypeScript
