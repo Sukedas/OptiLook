@@ -2,6 +2,20 @@
 
 App para recomendar monturas según el tipo de rostro, junto con el manejo de clientes y transacciones para la compra de las monturas.
 
+## Requerimientos Funcionales 
+- Registro y gestión de usuarios.
+- Almacenamiento de información personal y fórmulas ópticas.
+- Carga de fórmulas de optometría en formato digital.
+- Gestión de tipos de rostro.
+- Registro y administración de monturas.
+- Gestión de materiales de monturas.
+- Generación de recomendaciones de monturas según el tipo de rostro.
+- Almacenamiento del historial de recomendaciones.
+- Gestión de compras y transacciones.
+- Control de inventario de monturas.
+
+--- ## Instalación y Configuración
+
 Este repositorio es un monorepo con:
 - Backend en `FastAPI` (Python)
 - Frontend en `Next.js` (React)
@@ -153,3 +167,37 @@ Si tienes Docker Desktop iniciado y prefieres levantar todos los servicios en co
 - [x] **Conexión Frontend-Backend**: Flujos de compra, cambio de estados inline, diagnósticos vectoriales de rostro y sincronización automática de stock con React Query v5.
 - [ ] Implementación de pasarela de pagos real.
 - [ ] Carga automatizada de PDF oftálmico con OCR (reconocimiento óptico).
+
+
+## Diagrama Entidad-Relación
+
+El diagrama entidad-relación del sistema puede consultarse en el siguiente archivo:
+
+[Diagrama Entidad-Relación]
+<img width="1600" height="955" alt="Diagrama Entidad Relación" src="https://github.com/user-attachments/assets/1f9725dc-ebe4-41fe-88f7-3eceebd1eb7b" />
+
+
+También puede visualizarse directamente desde el repositorio de GitHub.
+
+---
+
+## Integrantes del Grupo
+
+| Integrante          | Rol                               |
+| ------------------- | --------------------------------- |
+| Edward Garcia       | Diseño de Base de Datos           |
+| Julian Cabrera      | Modelo Entidad-Relación           |
+| Daniel Presiga      | Procedimientos, Vistas y Triggers |
+| Jaider Carvajal     | Documentación y Pruebas           |
+
+---
+
+## Tecnologías Utilizadas
+
+* PostgreSQL
+* SQL
+* pgAdmin 4
+* Git
+* GitHub
+*Python
+*TypeScript
